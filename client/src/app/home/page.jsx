@@ -8,7 +8,7 @@ import ChatBot from "@/app/home/components/ChatBot";
 export default function HomePage() {
   return (
     <>
-      <Navbar usuario="Usuario01" />
+      <Navbar usuario="Rosmeri Ccanto" />
       <HeroSection />
       <CategoriasSection />
       <TendenciasSection />
