@@ -1,16 +1,21 @@
 'use client'; // Este componente se ejecuta del lado del cliente
-
+import { loginUser, registerUser } from '../services/auth'; // Importa las funciones de autenticación
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Importamos router para redirigir después del login
 import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import LoginPage from './login/page';
 
 export default function HomePage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const router = useRouter(); // Hook de Next.js para navegación programática
 
-  const handleLogin = async (e) => {
+
+  /* const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
@@ -24,7 +29,31 @@ export default function HomePage() {
       console.error('Error al iniciar sesión:', error);
       // Aquí podrías mostrar feedback al usuario si la autenticación falla
     }
+  }; */
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    const formData = new FormData(e.target);
+    const result = await loginUser(
+      formData.get('email'),
+      formData.get('password')
+    );
+
+    if (result.success) {
+      // Redirigir o actualizar estado global
+      router.push('/home'); // Redirige al home después del login exitoso
+      console.log('Login exitoso:', result.data);
+    } else {
+      setError(result.error);
+    }
+
+    setLoading(false);
   };
+
+
 
   return (
     <main className="min-h-screen flex">
@@ -45,10 +74,10 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold mb-4 text-[#0B3B5B]">Bienvenido</h1>
         <p className="mb-6 text-gray-600">Ingresa sesión a tu cuenta</p>
 
-        <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
           <div className="relative">
             <EnvelopeIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <input
+            <input name='email'
               type="email"
               placeholder="Correo electrónico"
               value={email}
@@ -60,7 +89,7 @@ export default function HomePage() {
 
           <div className="relative">
             <LockClosedIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <input
+            <input name='password'
               type="password"
               placeholder="Contraseña"
               value={password}

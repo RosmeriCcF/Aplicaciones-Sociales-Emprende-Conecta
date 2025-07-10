@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { logoutUser } from '../../services/auth'; // Asegúrate de que esta función esté implementada correctamente
 
 export default function Navbar({ usuario = 'Rosmeri Ccanto Flores', mostrarBoton = false }) {
   const [open, setOpen] = useState(false);
@@ -19,10 +20,10 @@ export default function Navbar({ usuario = 'Rosmeri Ccanto Flores', mostrarBoton
       <div className="flex items-center gap-8 relative text-[#0B3B5B] font-medium">
         <Link href="/home">Inicio</Link>
         <li>
-      <Link href="/emprendimientos" className="hover:underline">
-        Emprendimientos
-      </Link>
-    </li>
+          <Link href="/emprendimientos" className="hover:underline">
+            Emprendimientos
+          </Link>
+        </li>
         <Link href="/sobre-nosotros">Sobre Nosotros</Link>
 
         {/* Botón o perfil */}
@@ -43,7 +44,7 @@ export default function Navbar({ usuario = 'Rosmeri Ccanto Flores', mostrarBoton
                 <ul className="flex flex-col">
                   <li className="px-4 py-2 hover:bg-[#164760] cursor-pointer">Perfil</li>
                   <li className="px-4 py-2 hover:bg-[#164760] cursor-pointer">Mis favoritos</li>
-                  <Link href="/"><li className="px-4 py-2 hover:bg-[#164760] cursor-pointer">Cerrar sesión</li></Link> 
+                  <li onClick={logoutUser} className="px-4 py-2 hover:bg-[#164760] cursor-pointer">Cerrar sesión</li>
                 </ul>
               </div>
             )}
